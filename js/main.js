@@ -79,28 +79,7 @@
     quoteLine.textContent = quotes[0];
   }
 
-  /* ── 工具 1：Token 错峰省钱计算器 ── */
-  var tokenCost = document.getElementById("tokenCost");
-  if (tokenCost) {
-    var tokenVal = document.getElementById("tokenVal");
-    var dayCost = document.getElementById("dayCost");
-    var nightCost = document.getElementById("nightCost");
-    var tokenSave = document.getElementById("tokenSave");
-    var fmt = function (n) { return "¥" + n.toLocaleString("zh-CN"); };
-
-    function update() {
-      var v = Number(tokenCost.value);
-      var half = v * 0.5;
-      tokenVal.textContent = fmt(v);
-      dayCost.textContent = fmt(v);
-      nightCost.textContent = fmt(half);
-      tokenSave.textContent = fmt(half * 12);
-    }
-    tokenCost.addEventListener("input", update);
-    update();
-  }
-
-  /* ── 工具 2：开店决策小测 ── */
+  /* ── 工具 1：开店决策小测 ── */
   var quiz = document.getElementById("quiz");
   if (quiz) {
     var qs = quiz.querySelectorAll(".quiz-q");
@@ -153,7 +132,7 @@
     }
   }
 
-  /* ── 工具 3：你是哪种 AI 用户？ ── */
+  /* ── 工具 2：你是哪种 AI 用户？ ── */
   var quiz2 = document.getElementById("quiz2");
   if (quiz2) {
     var q2s = quiz2.querySelectorAll(".quiz-q");
