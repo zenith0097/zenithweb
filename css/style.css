@@ -545,30 +545,4 @@ body::before {
 @media (max-width: 1000px) { .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
 @media (max-width: 640px) { .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: .7rem !important; } }
 
-/* ===== 资料区：三栏小格，点进去下载（2026-09-29 过路定的布局）===== */
-.res-grid {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem;
-  max-width: 1080px; margin: 0 auto;
-}
-.res-card {
-  display: flex; flex-direction: column; gap: .4rem; text-decoration: none; color: inherit;
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.05rem;
-  background: rgba(255,255,255,.66); transition: transform .18s, box-shadow .18s;
-}
-.res-card:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(124,58,237,.14); }
-.res-tag {
-  align-self: flex-start; font-size: .68rem; letter-spacing: .06em; color: #7C3AED;
-  background: rgba(139,92,246,.12); border: 1px solid rgba(139,92,246,.3);
-  border-radius: 999px; padding: .12rem .55rem;
-}
-.res-card h3 { font-size: .98rem; margin: 0; line-height: 1.45; }
-.res-card p { color: var(--text-soft); font-size: .82rem; margin: 0; line-height: 1.65; }
-.res-dl { margin-top: auto; padding-top: .5rem; font-size: .8rem; color: #7C3AED; font-weight: 700; }
-@media (max-width: 640px) {
-  .res-grid { gap: .6rem; }
-  .res-card { padding: .8rem .7rem; border-radius: 14px; }
-  .res-card h3 { font-size: .86rem; }
-  .res-card p { font-size: .74rem; line-height: 1.55; }
-  .res-tag { font-size: .62rem; }
-  .res-dl { font-size: .74rem; }
-}
+/* 资料区样式：等过路定了排法（A/B/C）并给了文件再加回来，先不留死代码 */
