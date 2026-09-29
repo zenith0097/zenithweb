@@ -441,7 +441,9 @@ body {
   height: 70%; pointer-events: none; z-index: 0;
   background: radial-gradient(58% 55% at 50% 8%, rgba(167,139,250,0.30), transparent 70%);
 }
-.hero > * { position: relative; z-index: 1; }
+/* 只把内容层抬到晨光之上。原来写的是 .hero > *，会把山形和星空的 position:absolute
+   一起顶掉（同优先级、后写的赢），首屏就变成文字挤左边、山形跑到右边的两栏模样。 */
+.hero-inner { position: relative; z-index: 2; }
 /* 区块标题下的小光条 */
 .sec-title::after, .section-title::after {
   content: ""; position: absolute; left: 50%; bottom: -8px; transform: translateX(-50%);
