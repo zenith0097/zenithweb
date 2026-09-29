@@ -109,7 +109,21 @@ def main():
         p = os.path.join(ROOT, f.replace("/", os.sep))
         chk(os.path.exists(p), f, "%d 字节" % os.path.getsize(p) if os.path.exists(p) else "缺失")
 
-    print("\n[9] 疑似死样式（提示，不计入成败）")
+    print("\n[9] 上线前必删项")
+    temp_marks = {
+        "diagBadge": "临时诊断角标（窗口宽度/栏数）",
+        "vwBadge": "小样宽度角标",
+        "sample-flag": "小样标识",
+    }
+    noted = False
+    for key, label in temp_marks.items():
+        if key in html:
+            noted = True
+            chk(False, "页面里还留着：%s" % label, "上线前必须删掉")
+    if not noted:
+        chk(True, "没有残留的调试/小样标记", "")
+
+    print("\n[10] 疑似死样式（提示，不计入成败）")
     live = set()
     for s in re.findall(r'class="([^"]+)"', html):
         live.update(s.split())

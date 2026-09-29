@@ -532,3 +532,8 @@ body::before {
   outline: 3px solid rgba(139, 92, 246, .55);
   outline-offset: 3px;
 }
+
+/* ===== 兜底：玩法区任何宽度都保持并列，绝不再掉成单列（2026-09-29 过路要求）=====
+   放在文件最末尾 = 优先级最高，防止以后有人加的规则把它压回单列。 */
+@media (max-width: 1000px) { .tools-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+@media (max-width: 640px) { .tools-grid { grid-template-columns: repeat(2, 1fr) !important; gap: .8rem !important; } }
