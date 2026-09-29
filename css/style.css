@@ -17,7 +17,7 @@
 
   --text: #3E3A52;
   --text-soft: #6B6480;
-  --text-dim: #8F88A8;
+  --text-dim: #6D6682;         /* 辅助小字：对主底/章节底/卡片底对比度均 ≥4.5:1（原 #8F88A8 仅 3.1:1，读着费劲）*/
 
   /* 鐎涙褰块梼鑸殿潽閿涘牏些閸斻劋绱崗鍫礆 */
   --fs-hero: clamp(2.4rem, 8vw, 4.6rem);
@@ -213,6 +213,10 @@ img { max-width: 100%; }
 .reveal.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
+  .fade-up { opacity: 1; transform: none; animation: none; }
+  body::before { animation: none; }
+  .hero-mountain { transition: none; }
+  .cursor-glow { display: none; }
   html { scroll-behavior: auto; }
 }
 
@@ -277,7 +281,6 @@ img { max-width: 100%; }
 .series-item:hover { border-color: #6D5BD0; background: rgba(167,139,250,.08); transform: translateX(4px); }
 .s-no { font-family: var(--mono); color: var(--orange); font-weight: 700; }
 .series-item p { color: var(--text-soft); }
-.series-foot { margin-top: 1.2rem; color: var(--text-dim); font-size: var(--fs-small); }
 .link-gold { color: #6D5BD0; }
 
 /* 闁叉垵褰炴晶?*/
@@ -540,7 +543,7 @@ body::before {
   background: radial-gradient(circle, rgba(167,139,250,0.16), transparent 65%);
   opacity: 0; transition: opacity .5s ease;
 }
-body:hover .cursor-glow { opacity: 1; }
+.cursor-glow.is-on { opacity: 1; }
 /* Hero 入场：错峰上浮 */
 .fade-up { opacity: 0; transform: translateY(18px); animation: fadeUp .8s cubic-bezier(.22,.68,.3,1) forwards; }
 @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
@@ -548,3 +551,10 @@ body:hover .cursor-glow { opacity: 1; }
 .hero-mountain { transition: transform .18s linear; will-change: transform; }
 /* 新测试标题行距 */
 .quiz-q h4 { margin-bottom: .9rem; }
+
+/* ===== 键盘可达：Tab 走到哪一目了然（品牌紫焦点环）===== */
+:focus-visible {
+  outline: 3px solid rgba(139, 92, 246, .55);
+  outline-offset: 3px;
+}
+input[type="range"]:focus-visible { outline-offset: 6px; }

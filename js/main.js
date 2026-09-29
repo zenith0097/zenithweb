@@ -2,6 +2,9 @@
 (function () {
   "use strict";
 
+  /* ── 系统设置：用户开了「减少动态效果」就不启动装饰动画 ── */
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   /* ── 导航：滚动状态 + 移动端菜单 ── */
   var nav = document.getElementById("nav");
   var navToggle = document.getElementById("navToggle");
@@ -40,7 +43,7 @@
 
   /* ── 星空 ── */
   var starsBox = document.getElementById("stars");
-  if (starsBox) {
+  if (starsBox && !reduceMotion) {
     var html = "";
     for (var i = 0; i < 42; i++) {
       var big = i % 9 === 0;
@@ -61,7 +64,7 @@
     "深内容，浅表达。看完是\"原来如此\"，不是\"完了完了\"。",
     "山顶见。"
   ];
-  if (quoteLine && window.matchMedia("(prefers-reduced-motion: reduce)").matches === false) {
+  if (quoteLine && !reduceMotion) {
     var qi = 0, ci = 0, deleting = false;
     (function type() {
       var q = quotes[qi];
@@ -191,20 +194,29 @@
     });
   }
 
-  /* ── 好玩：鼠标光斑（紫色微光跟随）── */
-  var glow = document.createElement("div");
-  glow.className = "cursor-glow";
-  document.body.appendChild(glow);
-  var gx = innerWidth / 2, gy = innerHeight / 3, tx = gx, ty = gy, raf = null;
-  document.addEventListener("mousemove", function (e) {
-    tx = e.clientX; ty = e.clientY;
-    if (!raf) raf = requestAnimationFrame(function step() {
-      gx += (tx - gx) * 0.12; gy += (ty - gy) * 0.12;
-      glow.style.transform = "translate(" + (gx - 160) + "px," + (gy - 160) + "px)";
-      if (Math.abs(tx - gx) > 0.5 || Math.abs(ty - gy) > 0.5) raf = requestAnimationFrame(step);
-      else raf = null;
-    });
-  }, { passive: true });
+  /* ── 好玩：鼠标光斑（紫色微光跟随；首次移动才亮，免得加载时页中央先冒一团光；
+        触屏设备没有鼠标，直接不建这层）── */
+  if (!reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    var glow = document.createElement("div");
+    glow.className = "cursor-glow";
+    document.body.appendChild(glow);
+    var gx = 0, gy = 0, tx = 0, ty = 0, raf = null;
+    document.addEventListener("mousemove", function (e) {
+      if (!glow.classList.contains("is-on")) {
+        gx = tx = e.clientX; gy = ty = e.clientY;
+        glow.style.transform = "translate(" + (gx - 160) + "px," + (gy - 160) + "px)";
+        glow.classList.add("is-on");
+        return;
+      }
+      tx = e.clientX; ty = e.clientY;
+      if (!raf) raf = requestAnimationFrame(function step() {
+        gx += (tx - gx) * 0.12; gy += (ty - gy) * 0.12;
+        glow.style.transform = "translate(" + (gx - 160) + "px," + (gy - 160) + "px)";
+        if (Math.abs(tx - gx) > 0.5 || Math.abs(ty - gy) > 0.5) raf = requestAnimationFrame(step);
+        else raf = null;
+      });
+    }, { passive: true });
+  }
 
   /* ── 好玩：Hero 入场动画（错峰浮现）── */
   var heroEls = document.querySelectorAll(".hero .fade-up");
@@ -216,7 +228,7 @@
 
   /* ── 动态：Hero 山视差（滚动时山缓移）── */
   var mount = document.querySelector(".hero-mountain");
-  if (mount) {
+  if (mount && !reduceMotion) {
     window.addEventListener("scroll", function () {
       var y = window.scrollY;
       if (y < innerHeight) mount.style.transform = "translateY(" + (y * 0.22) + "px)";
