@@ -109,6 +109,15 @@ def main():
         p = os.path.join(ROOT, f.replace("/", os.sep))
         chk(os.path.exists(p), f, "%d 字节" % os.path.getsize(p) if os.path.exists(p) else "缺失")
 
+    print("\n[8b] 资料区下载链接是否都有真文件（防止点开 404）")
+    local_links = sorted(set(re.findall(r'href="(资料/[^"]+)"', html)))
+    if not local_links:
+        chk(True, "资料区暂无本地文件链接", "")
+    for href in local_links:
+        p = os.path.join(ROOT, href.replace("/", os.sep))
+        chk(os.path.exists(p), href.split("/")[-1],
+            "%d 字节" % os.path.getsize(p) if os.path.exists(p) else "文件不存在")
+
     print("\n[9] 上线前必删项")
     temp_marks = {
         "diagBadge": "临时诊断角标（窗口宽度/栏数）",

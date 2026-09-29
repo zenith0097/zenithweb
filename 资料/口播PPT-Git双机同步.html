@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>两台电脑对不上账？Git 双机同步（口播PPT v1）</title>
+<style>
+  /* ========== 色板（沿用账号体系：米白金橙） ========== */
+  :root {
+    --bg: #FAF5EC; --bg2: #F6EEDF; --card: #FFFFFF;
+    --gold: #C9A24B; --gold-deep: #A87F2F; --orange: #E8871E; --orange-deep: #D46F0A;
+    --ink: #3A3226; --ink-soft: #57503F; --line: #EADFC8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { height: 100%; }
+  body {
+    height: 100%; background: var(--bg);
+    font-family: "HarmonyOS Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    color: var(--ink); overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .deck {
+    position: relative; width: min(96vw, calc((100vh - 140px) * 1.7778));
+    aspect-ratio: 16 / 9; max-height: calc(100vh - 140px);
+    background: var(--bg); border-radius: 22px;
+    box-shadow: 0 30px 80px rgba(168, 127, 47, 0.22), 0 2px 8px rgba(168,127,47,.08);
+    overflow: hidden;
+  }
+  .slide {
+    position: absolute; inset: 0; padding: 8% 10% 7%;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    background:
+      radial-gradient(1000px 520px at 90% -10%, rgba(232,135,30,0.12), transparent 62%),
+      radial-gradient(760px 460px at -8% 110%, rgba(201,162,75,0.16), transparent 60%),
+      linear-gradient(165deg, #FEFBF4 0%, #F8F1E2 100%);
+  }
+  .slide.active { display: flex; animation: fadeUp .5s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .slide::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--orange), var(--gold), var(--orange));
+    background-size: 300% 100%; animation: shimmer 8s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: 300% 0; } }
+  .slide > *:not(.brand):not(.pg) { position: relative; z-index: 1; }
+
+  .pg { position: absolute; bottom: 3%; left: 4%; font-size: 16px; letter-spacing: 3px; font-weight: 700; color: var(--gold-deep); opacity: .85; font-variant-numeric: tabular-nums; }
+  .brand { position: absolute; bottom: 3%; right: 4%; font-size: 16px; letter-spacing: 3px; color: var(--gold-deep); opacity: .8; }
+
+  /* 字体：字少，字号更大 */
+  h1 { font-size: clamp(32px, calc(var(--cqh, 1vh) * 8.6), 92px); line-height: 1.18; font-weight: 900; }
+  .gold { color: var(--gold-deep); }
+  .orange { color: var(--orange-deep); }
+
+  .kicker {
+    display: flex; align-items: center; justify-content: center; gap: 18px;
+    font-size: clamp(20px, calc(var(--cqh, 1vh) * 4.2), 44px);
+    letter-spacing: 5px; font-weight: 800; color: var(--orange-deep);
+    margin-bottom: calc(var(--cqh, 1vh) * 4); white-space: nowrap;
+  }
+  .kicker::before, .kicker::after {
+    content: ""; width: 48px; height: 3px; border-radius: 2px; flex: none;
+    background: linear-gradient(90deg, var(--gold), var(--orange));
+  }
+  .kicker::after { transform: scaleX(-1); }
+
+  /* 封面 */
+  .cover { text-align: center; gap: calc(var(--cqh, 1vh) * 2.8); }
+  .cover .badge { font-size: 18px; letter-spacing: 8px; color: var(--gold-deep); font-weight: 700; }
+  .day-tag { display: inline-block; font-size: clamp(18px, calc(var(--cqh, 1vh) * 3.6), 38px); font-weight: 800; letter-spacing: 4px; color: var(--orange-deep); background: rgba(232,135,30,.10); border: 1.5px solid rgba(232,135,30,.4); border-radius: 999px; padding: calc(var(--cqh, 1vh) * 0.8) calc(var(--cqw, 1vw) * 2.2); }
+  .cover .cover-title { font-size: clamp(40px, calc(var(--cqh, 1vh) * 10.4), 112px); font-weight: 900; line-height: 1.1; letter-spacing: 3px; color: var(--ink); }
+  .cover .cover-title .hl { color: var(--orange-deep); }
+  .cover .sub2 { font-size: clamp(22px, calc(var(--cqh, 1vh) * 5), 52px); color: var(--gold-deep); font-weight: 800; letter-spacing: 2px; }
+  .cover .divider { width: 120px; height: 3px; border-radius: 3px; background: linear-gradient(90deg, var(--gold), var(--orange)); }
+  .cover .series { font-size: clamp(16px, calc(var(--cqh, 1vh) * 3), 32px); color: var(--orange-deep); font-weight: 700; letter-spacing: 2px; }
+
+  /* 概念页 */
+  .concept { text-align: center; justify-content: center; gap: calc(var(--cqh, 1vh) * 4.2); }
+  .line { font-size: clamp(34px, calc(var(--cqh, 1vh) * 9.2), 98px); font-weight: 900; line-height: 1.22; color: var(--ink); letter-spacing: 2px; }
+  .line.mid { font-size: clamp(28px, calc(var(--cqh, 1vh) * 7.4), 78px); }
+  .line .hl-line { color: var(--orange-deep); }
+
+  .foot { text-align: center; font-size: clamp(22px, calc(var(--cqh, 1vh) * 4.8), 50px); color: var(--ink-soft); line-height: 1.55; font-weight: 700; }
+  .foot-hand { text-align: center; font-size: clamp(26px, calc(var(--cqh, 1vh) * 5.6), 58px); font-weight: 900; color: var(--gold-deep); line-height: 1.4; letter-spacing: 1px; }
+  .foot-hand .orange { color: var(--orange-deep); }
+
+  /* 双卡对比 */
+  .duo { display: flex; gap: calc(var(--cqw, 1vw) * 3); justify-content: center; width: 100%; }
+  .duo .d-card { flex: 1; max-width: 44%; }
+  .d-card { background: rgba(255,255,255,0.92); border-radius: 26px; display: flex; align-items: center; justify-content: center; gap: calc(var(--cqw, 1vw) * 2.2); padding: calc(var(--cqh, 1vh) * 3.8) calc(var(--cqw, 1vw) * 3.2); box-shadow: 0 22px 54px rgba(168,127,47,0.13); }
+  .d-card.hot { background: #FFF6E8; box-shadow: 0 24px 58px rgba(232,135,30,0.18); }
+  .d-card .d-ic { font-size: clamp(32px, calc(var(--cqh, 1vh) * 7.2), 76px); line-height: 1; }
+  .d-card .d-w { font-size: clamp(26px, calc(var(--cqh, 1vh) * 5.6), 58px); font-weight: 900; }
+  .d-card .d-d { font-size: clamp(19px, calc(var(--cqh, 1vh) * 4), 42px); color: var(--ink-soft); line-height: 1.55; font-weight: 600; }
+
+  /* 四命令横排 */
+  .row4 { width: 100%; display: flex; gap: calc(var(--cqw, 1vw) * 2.2); align-items: stretch; justify-content: center; }
+  .row4 .cell { background: rgba(255,255,255,0.92); border-radius: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--cqh, 1vh) * 1.2); text-align: center; padding: calc(var(--cqh, 1vh) * 3.6) calc(var(--cqw, 1vw) * 1.4); box-shadow: 0 18px 44px rgba(168,127,47,0.12); flex: 1; max-width: 23%; }
+  .row4 .cell.hot { background: #FFF6E8; box-shadow: 0 20px 48px rgba(232,135,30,0.18); }
+  .row4 .cell .cmd { font-size: clamp(28px, calc(var(--cqh, 1vh) * 6.4), 66px); font-weight: 900; color: var(--orange-deep); letter-spacing: 1px; }
+  .row4 .cell .ds { font-size: clamp(19px, calc(var(--cqh, 1vh) * 4), 42px); color: var(--ink-soft); font-weight: 700; line-height: 1.4; }
+
+  /* 三步页：左文右截图槽 */
+  .step-row { width: 100%; display: flex; gap: calc(var(--cqw, 1vw) * 4); align-items: center; justify-content: center; }
+  .step-txt { flex: 1.05; min-width: 0; display: flex; flex-direction: column; gap: calc(var(--cqh, 1vh) * 3); text-align: left; }
+  .step-txt .kicker { justify-content: flex-start; }
+  .step-txt .line, .step-txt .foot { text-align: left; }
+
+  /* 截图槽 */
+  .shot { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: calc(var(--cqh, 1vh) * 1.6); }
+  .shot-slot {
+    width: 100%; aspect-ratio: 16 / 9.4; border-radius: 18px;
+    background: rgba(255,255,255,0.9); overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 18px 44px rgba(168,127,47,0.14);
+    position: relative;
+  }
+  .shot-slot .shot-ph {
+    text-align: center; color: var(--gold-deep);
+    display: flex; flex-direction: column; align-items: center; gap: calc(var(--cqh, 1vh) * 1);
+  }
+  .shot-ph .ph-ic { font-size: clamp(30px, calc(var(--cqh, 1vh) * 6.6), 70px); line-height: 1; }
+  .shot-ph .ph-t { font-size: clamp(16px, calc(var(--cqh, 1vh) * 3.2), 34px); font-weight: 800; letter-spacing: 2px; }
+  .shot-ph .ph-p { font-size: clamp(13px, calc(var(--cqh, 1vh) * 2.6), 28px); color: var(--ink-soft); font-weight: 600; letter-spacing: 1px; }
+  .shot-slot.placeholder { border: 3px dashed var(--gold); animation: dashBreath 2.4s ease-in-out infinite; }
+  @keyframes dashBreath {
+    0%,100% { border-color: rgba(201,162,75,.7); box-shadow: 0 18px 44px rgba(168,127,47,0.14), 0 0 0 0 rgba(232,135,30,0); }
+    50% { border-color: rgba(232,135,30,.85); box-shadow: 0 18px 44px rgba(168,127,47,0.14), 0 0 0 8px rgba(232,135,30,.07); }
+  }
+  .shot-slot .shot-img { width: 100%; height: 100%; object-fit: contain; opacity: 0; }
+  .shot.has-img .shot-slot.placeholder { border: none; animation: none; }
+  .shot.has-img .shot-ph { display: none; }
+  .shot.has-img .shot-img { animation: shotIn .75s cubic-bezier(.2,.8,.3,1.08) .12s both; }
+  @keyframes shotIn { 0% { opacity: 0; transform: scale(1.08); filter: blur(6px); } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
+  .shot-cap { font-size: clamp(14px, calc(var(--cqh, 1vh) * 2.8), 30px); font-weight: 700; color: var(--gold-deep); letter-spacing: 2px; }
+
+  /* 四命令 2x2 */
+  .grid2x2 { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: calc(var(--cqw, 1vw) * 2); }
+  .grid2x2 .cell { background: rgba(255,255,255,0.92); border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--cqh, 1vh) * 0.8); text-align: center; padding: calc(var(--cqh, 1vh) * 2.2) calc(var(--cqw, 1vw) * 1); box-shadow: 0 14px 34px rgba(168,127,47,0.12); }
+  .grid2x2 .cell.hot { background: #FFF6E8; box-shadow: 0 16px 38px rgba(232,135,30,0.18); }
+  .grid2x2 .cell .cmd { font-size: clamp(26px, calc(var(--cqh, 1vh) * 5.6), 58px); font-weight: 900; color: var(--orange-deep); letter-spacing: 1px; }
+  .grid2x2 .cell .ds { font-size: clamp(16px, calc(var(--cqh, 1vh) * 3.2), 34px); color: var(--ink-soft); font-weight: 700; }
+
+  /* 收尾页 */
+  .end-fin { text-align: center; justify-content: center; gap: calc(var(--cqh, 1vh) * 2); }
+  .end-fin .e-core { display: flex; flex-direction: column; justify-content: center; gap: calc(var(--cqh, 1vh) * 1.4); align-items: center; }
+  .end-fin .e-foot { display: flex; flex-direction: column; gap: calc(var(--cqh, 1vh) * 1); align-items: center; margin-top: calc(var(--cqh, 1vh) * 1.6); }
+  .end-title { font-size: clamp(38px, calc(var(--cqh, 1vh) * 9.4), 100px); font-weight: 900; line-height: 1.14; color: var(--ink); letter-spacing: 3px; }
+  .end-title .hl-gold { color: var(--gold-deep); }
+  .end-title .hl-orange { color: var(--orange-deep); }
+  .end-sub { font-size: clamp(20px, calc(var(--cqh, 1vh) * 4.2), 44px); color: var(--ink-soft); font-weight: 600; line-height: 1.7; }
+  .end-cta { display: inline-block; font-size: clamp(20px, calc(var(--cqh, 1vh) * 4.2), 44px); font-weight: 800; color: var(--orange-deep); background: rgba(232,135,30,0.10); border-radius: 999px; padding: calc(var(--cqh, 1vh) * 1.4) calc(var(--cqw, 1vw) * 3); }
+  .end-next { font-size: clamp(20px, calc(var(--cqh, 1vh) * 4.2), 44px); font-weight: 900; color: var(--gold-deep); letter-spacing: 1px; }
+
+  /* 动效 */
+  .step { opacity: 0; transform: translateY(16px); }
+  .step.revealed { animation: stepIn .6s cubic-bezier(.18,.85,.3,1.12) both; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(22px); filter: blur(5px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  .step.boom.revealed { animation: stampIn .5s cubic-bezier(.2,.8,.3,1.3) both; }
+  @keyframes stampIn { 0% { opacity: 0; transform: scale(1.35) rotate(-2deg); } 60% { opacity: 1; transform: scale(.94) rotate(1deg); } 80% { transform: scale(1.04) rotate(-.4deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
+  .char { display: inline-block; white-space: pre; }
+  .float { animation: floaty 3.6s ease-in-out infinite; }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  .kicker.step.revealed { animation: kickDrop .55s cubic-bezier(.2,.9,.3,1.2) both; }
+  @keyframes kickDrop { from { opacity: 0; transform: translateY(-18px); filter: blur(3px); } to { opacity: 1; transform: none; filter: blur(0); } }
+  .kicker.step.revealed::before, .kicker.step.revealed::after { animation: lineGrow .5s .1s ease both; }
+  @keyframes lineGrow { from { width: 0; } to { width: 48px; } }
+  .cover .cover-title .hl, .line .orange, .end-title .hl-gold, .end-title .hl-orange {
+    display: inline-block; animation: glowBreathe 2.8s ease-in-out infinite; }
+  @keyframes glowBreathe { 0%,100% { text-shadow: 0 0 0 rgba(232,135,30,0); transform: scale(1); } 50% { text-shadow: 0 0 20px rgba(232,135,30,.5); transform: scale(1.03); } }
+  .end .end-cta.step.revealed, .end-fin .end-cta.step.revealed { animation: ctaPulse 2.2s ease-in-out infinite; }
+  @keyframes ctaPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(232,135,30,.35); } 50% { box-shadow: 0 0 0 12px rgba(232,135,30,0); } }
+  .duo .d-card.step.revealed, .row4 .cell.step.revealed { animation: cardPop .55s cubic-bezier(.18,.85,.3,1.16) both; }
+  @keyframes cardPop { from { opacity: 0; transform: translateY(26px) scale(.95); filter: blur(4px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+  .nav {
+    position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 14px; background: rgba(58,50,38,0.85); color: #fff;
+    padding: 8px 16px; border-radius: 999px; font-size: 13px; z-index: 50; backdrop-filter: blur(6px);
+  }
+  .nav button { background: none; border: none; color: #fff; font-size: 17px; cursor: pointer; padding: 0 6px; line-height: 1; }
+  .nav button:hover { color: #F2C14E; }
+  .nav .dots { display: flex; gap: 6px; }
+  .nav .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.35); cursor: pointer; }
+  .nav .dot.on { background: #F2C14E; }
+  .nav .hint { font-size: 13px; opacity: .6; letter-spacing: 1px; margin-right: 2px; }
+</style>
+<body>
+  <div class="deck" id="deck">
+    <!-- P0 封面 -->
+    <section class="slide cover active" data-auto="1">
+      <span class="pg">01</span>
+      <div class="step"><div class="badge">ZENITH AI 研学社</div></div>
+      <div class="step"><span class="day-tag">月度场景解答日</span></div>
+      <h1 class="cover-title" data-type>两台电脑，<span class="hl">对不上账</span>？</h1>
+      <div class="step"><div class="sub2">私信问得最多的一个问题</div></div>
+      <div class="step"><div class="divider"></div></div>
+      <div class="step"><div class="series">Git 双机同步方案 ｜ 后厨流水账</div></div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P1 开场场景 -->
+    <section class="slide concept">
+      <span class="pg">02</span>
+      <div class="kicker step" data-order="1">最近私信问得最多的</div>
+      <div class="line step" data-order="2">不是哪个 AI 工具强</div>
+      <div class="line mid step" data-order="3">是家里公司，<span class="orange">对不上账</span></div>
+      <div class="foot step" data-order="4">这边改一半，那边还是旧的</div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P2 世界观 -->
+    <section class="slide concept">
+      <span class="pg">03</span>
+      <div class="kicker step" data-order="1">熟悉的观众都知道</div>
+      <div class="line step" data-order="2">我习惯用<span class="orange">餐厅</span>打比方</div>
+      <div class="foot step" data-order="3">今天讲后厨的人员结构</div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P3 后厨的问题 -->
+    <section class="slide concept">
+      <span class="pg">04</span>
+      <div class="kicker step" data-order="1">现在这后厨</div>
+      <div class="line mid step" data-order="2">你改你的，他改他的</div>
+      <div class="line mid step" data-order="3">各存各的，<span class="orange">从不同步</span></div>
+      <div class="foot-hand step boom" data-order="4">两边永远对不上</div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P4 解法预览 -->
+    <section class="slide concept">
+      <span class="pg">05</span>
+      <div class="kicker step" data-order="1">解法很简单</div>
+      <div class="line step" data-order="2">给后厨顶个<span class="orange">专职伙计</span></div>
+      <div class="foot step" data-order="3">谁改了、改了啥，都跟他报一声，一笔一笔全记着</div>
+      <div class="foot-hand step boom" data-order="4">我用的：GitHub</div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P5 网盘反驳 -->
+    <section class="slide concept">
+      <span class="pg">06</span>
+      <div class="kicker step" data-order="1">有人说：我用网盘同步啊</div>
+      <div class="line step" data-order="2">网盘是<span class="orange">传菜小弟</span></div>
+      <div class="foot-hand step boom" data-order="3">只传，不记</div>
+      <div class="foot step" data-order="4">传着传着就成"最终版3"了——想找回来？它不记得</div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P6 版本管理 -->
+    <section class="slide concept">
+      <span class="pg">07</span>
+      <div class="kicker step" data-order="1">真正想管好</div>
+      <div class="line mid step" data-order="2">还得做<span class="orange">版本管理</span></div>
+      <div class="duo">
+        <div class="d-card step" data-order="3"><span class="d-ic">🥡</span><span><span class="d-w">网盘 · 传菜小弟</span><br /><span class="d-d">给你省心</span></span></div>
+        <div class="d-card hot step" data-order="4"><span class="d-ic">📒</span><span><span class="d-w">git · 记账员</span><br /><span class="d-d">给你放心</span></span></div>
+      </div>
+      <div class="foot-hand step boom" data-order="5">你要哪个？</div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P7 第一步 建账 -->
+    <section class="slide concept">
+      <span class="pg">08</span>
+      <div class="step-row">
+        <div class="shot step" data-order="1" data-shot="step1">
+          <div class="shot-slot placeholder">
+            <div class="shot-ph"><span class="ph-ic">📷</span><span class="ph-t">步骤截图位</span><span class="ph-p">shots/step1.png</span></div>
+            <img class="shot-img" alt="第一步截图" />
+          </div>
+          <div class="shot-cap">第一步 · 建私有仓库</div>
+        </div>
+        <div class="step-txt">
+          <div class="kicker step" data-order="2">第一步</div>
+          <div class="line mid step" data-order="3">注册 GitHub，<br />建一个<span class="orange">私有仓库</span></div>
+          <div class="foot step" data-order="4">开一本账，只有你能看，别人翻不到</div>
+        </div>
+      </div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P8 第二步 配钥匙 -->
+    <section class="slide concept">
+      <span class="pg">09</span>
+      <div class="step-row">
+        <div class="shot step" data-order="1" data-shot="step2">
+          <div class="shot-slot placeholder">
+            <div class="shot-ph"><span class="ph-ic">📷</span><span class="ph-t">步骤截图位</span><span class="ph-p">shots/step2.png</span></div>
+            <img class="shot-img" alt="第二步截图" />
+          </div>
+          <div class="shot-cap">第二步 · 配钥匙</div>
+        </div>
+        <div class="step-txt">
+          <div class="kicker step" data-order="2">第二步</div>
+          <div class="line mid step" data-order="3">给两台电脑<br />各配一把<span class="orange">钥匙</span></div>
+          <div class="foot step" data-order="4">贴一串代码，2 分钟——认钥匙，不认密码</div>
+        </div>
+      </div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P9 第三步 日常 -->
+    <section class="slide concept">
+      <span class="pg">10</span>
+      <div class="step-row">
+        <div class="shot step" data-order="1" data-shot="step3">
+          <div class="shot-slot placeholder">
+            <div class="shot-ph"><span class="ph-ic">📷</span><span class="ph-t">步骤截图位</span><span class="ph-p">shots/step3.png</span></div>
+            <img class="shot-img" alt="第三步截图" />
+          </div>
+          <div class="shot-cap">第三步 · 三条命令一条拉取</div>
+        </div>
+        <div class="step-txt">
+          <div class="kicker step" data-order="2">第三步 · 日常就一件事</div>
+          <div class="grid2x2">
+            <div class="cell step" data-order="3"><div class="cmd">add</div><div class="ds">挑出改动</div></div>
+            <div class="cell hot step" data-order="4"><div class="cmd">commit</div><div class="ds">记上一笔</div></div>
+            <div class="cell step" data-order="5"><div class="cmd">push</div><div class="ds">誊到云端</div></div>
+            <div class="cell step" data-order="6"><div class="cmd">pull</div><div class="ds">拿最新页</div></div>
+          </div>
+          <div class="foot step" data-order="7">改完记一笔，换机拿最新</div>
+        </div>
+      </div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P10 实测 -->
+    <section class="slide concept">
+      <span class="pg">11</span>
+      <div class="kicker step" data-order="1">我自己实测</div>
+      <div class="line step" data-order="2">全程约 <span class="orange">10 分钟</span></div>
+      <div class="foot step" data-order="3">还是在 AI 一路帮忙的情况下</div>
+      <div class="foot-hand step boom" data-order="4">就这三步，没有你想的那么复杂</div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+
+    <!-- P11 收尾 -->
+    <section class="slide end-fin">
+      <span class="pg">12</span>
+      <div class="step e-core">
+        <h2 class="end-title">关注+留言，<span class="hl-orange">完整步骤发给你</span></h2>
+        <div class="end-sub">每期拆一个能直接上手的方案</div>
+      </div>
+      <div class="step e-foot">
+        <div class="end-cta">你的痛点留言告诉我</div>
+        <div class="end-next">哪个讨论最多，下期就拆哪个</div>
+      </div>
+      <span class="brand">ZENITH AI 研学社</span>
+    </section>
+  </div>
+
+  <div class="nav">
+    <button onclick="back()">◀</button>
+    <span id="pageLabel">1 / 12</span>
+    <button onclick="advance()">▶</button>
+    <div class="dots" id="dots"></div>
+    <span class="hint">点击 / 空格：逐条出现 · H：隐藏控件</span>
+  </div>
+
+  <script>
+    /* ========== 截图配置：把步骤截图放进 shots/ 目录即可，翻到该页自动呈现；无图显示虚线占位 ========== */
+    const SHOTS = {
+      step1: 'shots/step1.png',
+      step2: 'shots/step2.png',
+      step3: 'shots/step3.png'
+    };
+    document.querySelectorAll('.shot[data-shot]').forEach(el => {
+      const src = SHOTS[el.dataset.shot];
+      if (!src) return;
+      const img = el.querySelector('.shot-img');
+      const im = new Image();
+      im.onload = () => { img.src = src; el.classList.add('has-img'); };
+      im.src = src;
+    });
+
+    (function () {
+      function sizeCQ() { const d = document.querySelector('.deck'); if (!d) return; const r = d.getBoundingClientRect(); const st = document.documentElement.style; st.setProperty('--cqh', (r.height / 100) + 'px'); st.setProperty('--cqw', (r.width / 100) + 'px'); }
+      window.addEventListener('resize', sizeCQ); sizeCQ(); window.addEventListener('load', sizeCQ);
+    })();
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const label = document.getElementById('pageLabel'); const dotsBox = document.getElementById('dots');
+    const revealAll = location.hash.includes('all') || location.search.includes('all');
+    let cur = 0, stepIdx = 0;
+    slides.forEach((_, i) => { const d = document.createElement('div'); d.className = 'dot' + (i === 0 ? ' on' : ''); d.onclick = () => show(i); dotsBox.appendChild(d); });
+    const dots = Array.from(dotsBox.children);
+    function stepsOf(s) { return Array.from(s.querySelectorAll('.step')).sort((a, b) => (parseInt(a.dataset.order || 0, 10) - parseInt(b.dataset.order || 0, 10))); }
+    function setSteps(s, idx) { stepsOf(s).forEach((el, i) => el.classList.toggle('revealed', i <= idx)); }
+    function initType(h1) { h1._chars = []; const walk = (node) => { Array.from(node.childNodes).forEach(n => { if (n.nodeType === 3) { const txt = n.textContent; if (!txt) return; const frag = document.createDocumentFragment(); [...txt].forEach(ch => { const sp = document.createElement('span'); sp.className = 'char'; sp.textContent = ch; sp.style.opacity = '0'; h1._chars.push(sp); frag.appendChild(sp); }); node.replaceChild(frag, n); } else if (n.nodeType === 1 && n.tagName !== 'BR') { walk(n); } }); }; walk(h1); }
+    function playType(h1, delay) { if (!h1 || !h1._chars) return; h1._chars.forEach(c => { c.style.opacity = '0'; c.style.transition = 'none'; }); void h1.offsetWidth; h1._chars.forEach((c, i) => { setTimeout(() => { c.style.transition = 'opacity .09s'; c.style.opacity = '1'; }, delay + i * 65); }); }
+    document.querySelectorAll('h1[data-type]').forEach(initType);
+    function show(i) {
+      cur = Math.max(0, Math.min(slides.length - 1, i));
+      slides.forEach((s, k) => { const on = k === cur; s.classList.toggle('active', on); if (on) { const typed = s.querySelector('h1[data-type]'); if (s.dataset.auto) { const st = stepsOf(s); st.forEach((el, idx) => setTimeout(() => el.classList.add('revealed'), 250 + idx * 250)); stepIdx = st.length; if (typed) playType(typed, 700); } else { setSteps(s, revealAll ? stepsOf(s).length - 1 : 0); stepIdx = revealAll ? stepsOf(s).length - 1 : 0; } } });
+      updateNav();
+    }
+    function advance() { const s = slides[cur]; if (s.dataset.auto) { show(cur + 1); return; } const st = stepsOf(s); if (stepIdx < st.length - 1) { stepIdx++; setSteps(s, stepIdx); } else { show(cur + 1); } }
+    function back() { const s = slides[cur]; if (stepIdx > 0) { stepIdx--; setSteps(s, stepIdx); } else { show(cur - 1); } }
+    function updateNav() { dots.forEach((d, k) => d.classList.toggle('on', k === cur)); label.textContent = (cur + 1) + ' / ' + slides.length; }
+    document.addEventListener('click', e => { if (e.target.closest('.nav')) return; advance(); });
+    document.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); advance(); } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); back(); } else if (e.key === 'Home') show(0); else if (e.key === 'End') show(slides.length - 1); else if (e.key === 'h' || e.key === 'H') toggleNav(); });
+    function toggleNav() { const n = document.querySelector('.nav'); n.style.display = (n.style.display === 'none') ? 'flex' : 'none'; }
+    let tx = 0;
+    document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 60) { if (dx < 0) advance(); else back(); } }, { passive: true });
+    show(0);
+    if (location.hash.includes('audit') || location.search.includes('audit')) {
+      document.documentElement.classList.add('audit');
+      const st = document.createElement('style'); st.textContent = '.audit *, .audit *::before, .audit *::after { animation: none !important; transition: none !important; } .audit .step { opacity: 1 !important; transform: none !important; }'; document.head.appendChild(st);
+      window.addEventListener('load', () => { setTimeout(() => { slides.forEach((s, i) => { s.classList.add('active'); setSteps(s, stepsOf(s).length - 1); }); requestAnimationFrame(() => { const out = []; slides.forEach((s, i) => { const sr = s.getBoundingClientRect(); const kids = Array.from(s.children).filter(c => !c.classList.contains('brand') && !c.classList.contains('pg')); let top = 1e9, bottom = 0, left = 1e9, right = 0, overflow = []; kids.forEach(k => { const r = k.getBoundingClientRect(); top = Math.min(top, r.top); bottom = Math.max(bottom, r.bottom); left = Math.min(left, r.left); right = Math.max(right, r.right); if (r.top < sr.top - 1 || r.bottom > sr.bottom + 1 || r.left < sr.left - 1 || r.right > sr.right + 1) { overflow.push(k.className + '|L' + Math.round(r.left - sr.left) + '|R' + Math.round(sr.right - r.right) + '|W' + Math.round(r.width)); } }); const contentH = bottom - top; const centerOff = Math.round((sr.top + (sr.height - contentH) / 2) - top); out.push(`P${i + 1}|h${Math.round(contentH)}/${Math.round(s.clientHeight)}|center${centerOff}|hPad${Math.round(left - sr.left)}/${Math.round(sr.right - right)}|over${overflow.length ? overflow.join('~') : 'false'}`); }); document.title = 'AUDIT::' + out.join(' ;; '); }); }, 60); });
+    }
+    const hp = parseInt((location.hash || '').replace('#', ''), 10);
+    if (!isNaN(hp) && hp >= 1 && hp <= slides.length) show(hp - 1);
+    window.addEventListener('hashchange', () => { const n = parseInt((location.hash || '').replace('#', ''), 10); if (!isNaN(n) && n >= 1 && n <= slides.length) show(n - 1); });
+  </script>
+</body>
+</html>

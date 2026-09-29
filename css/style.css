@@ -456,36 +456,39 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 .hero-title { font-weight: 800; }
 .sec-head h2 { font-weight: 800; letter-spacing: .02em; }
 .tool-head h3 { font-weight: 700; }
-/* 好玩的东西：正方形网格排布 */
+/* 好玩的东西：两栏四方格（过路 9/29 定：两栏 4 格，第 4 格是「后续迭代」） */
 .tools-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem;
-  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem;
+  max-width: 980px; margin: 0 auto;
 }
 .tool-wrap {
   max-width: none; margin: 0;
   display: flex; flex-direction: column;
-  aspect-ratio: 1 / 1.05;
+  aspect-ratio: auto;
   background: rgba(255,255,255,0.66);
   -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
   box-shadow: 0 8px 30px rgba(124,58,237,0.08);
   transition: transform .35s cubic-bezier(.22,.68,.3,1), box-shadow .35s ease;
 }
 .tool-wrap:hover { transform: translateY(-6px); box-shadow: 0 18px 46px rgba(124,58,237,0.16); }
-.tool-head { padding: 1.3rem 1.4rem 0; }
-.tool-head h3 { font-size: 1.2rem; }
-.tool-head p { font-size: .92rem; }
-.tool-body { padding: 1.1rem 1.4rem 1.3rem; }
-.quiz { padding: 1.1rem 1.4rem 1.3rem; }
-.opt { padding: .8rem 1rem; font-size: .95rem; }
-.quiz-opts { gap: .6rem; }
-.tool-foot { max-width: none; margin: auto 0 0; padding: 0 1.4rem 1.2rem; font-size: .82rem; }
+.tool-head { padding: 1.1rem 1.2rem 0; }
+.tool-head h3 { font-size: 1.12rem; }
+.tool-head p { font-size: .88rem; }
+.tool-body { padding: .9rem 1.2rem 1.1rem; }
+.quiz { padding: .9rem 1.2rem 1.1rem; }
+.opt { padding: .7rem .9rem; font-size: .9rem; }
+.quiz-opts { gap: .55rem; }
+.tool-foot { max-width: none; margin: auto 0 0; padding: 0 1.2rem 1rem; font-size: .8rem; }
 .tool-wrap .btn-primary { align-self: flex-start; }
-/* 玩法区：三张卡始终三栏并排（过路 9/29 定：就是三栏，任何宽度都不许掉成一栏） */
-@media (max-width: 1000px) { .tools-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 1rem !important; } }
+/* 第 4 格：后续迭代（虚线卡，表示这个区还会长东西） */
+.tool-wrap-soon { border-style: dashed; background: rgba(139,92,246,.045); }
+.tool-wrap-soon .tool-badge { background: rgba(139,92,246,.16); }
+/* 玩法区：两栏，任何宽度都不许掉成一栏 */
+@media (max-width: 1000px) { .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 1rem !important; } }
 @media (max-width: 640px) {
-  .tools-grid { grid-template-columns: repeat(3, 1fr) !important; gap: .55rem !important; }
-  .tool-wrap { aspect-ratio: auto; border-radius: 14px; }
-  .tool-head { padding: .85rem .7rem 0; }
+  .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: .7rem !important; }
+  .tool-wrap { border-radius: 14px; }
+  .tool-head { padding: .85rem .8rem 0; }
   .tool-head .tool-badge { font-size: .62rem; padding: .12rem .45rem; margin-bottom: .45rem; }
   .tool-head h3 { font-size: .9rem; line-height: 1.35; }
   .tool-head p { font-size: .72rem; line-height: 1.5; }
@@ -538,7 +541,34 @@ body::before {
   outline-offset: 3px;
 }
 
-/* ===== 兜底：玩法区任何宽度都是三栏并排，绝不再掉成单列（2026-09-29 过路要求）=====
-   放在文件最末尾 = 优先级最高，防止以后有人加的规则把它压回单列。 */
-@media (max-width: 1000px) { .tools-grid { grid-template-columns: repeat(3, 1fr) !important; } }
-@media (max-width: 640px) { .tools-grid { grid-template-columns: repeat(3, 1fr) !important; gap: .6rem !important; } }
+/* ===== 兜底：玩法区任何宽度都是两栏并排，绝不再掉成单列（2026-09-29 过路要求）===== */
+@media (max-width: 1000px) { .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
+@media (max-width: 640px) { .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: .7rem !important; } }
+
+/* ===== 资料区：三栏小格，点进去下载（2026-09-29 过路定的布局）===== */
+.res-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem;
+  max-width: 1080px; margin: 0 auto;
+}
+.res-card {
+  display: flex; flex-direction: column; gap: .4rem; text-decoration: none; color: inherit;
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.05rem;
+  background: rgba(255,255,255,.66); transition: transform .18s, box-shadow .18s;
+}
+.res-card:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(124,58,237,.14); }
+.res-tag {
+  align-self: flex-start; font-size: .68rem; letter-spacing: .06em; color: #7C3AED;
+  background: rgba(139,92,246,.12); border: 1px solid rgba(139,92,246,.3);
+  border-radius: 999px; padding: .12rem .55rem;
+}
+.res-card h3 { font-size: .98rem; margin: 0; line-height: 1.45; }
+.res-card p { color: var(--text-soft); font-size: .82rem; margin: 0; line-height: 1.65; }
+.res-dl { margin-top: auto; padding-top: .5rem; font-size: .8rem; color: #7C3AED; font-weight: 700; }
+@media (max-width: 640px) {
+  .res-grid { gap: .6rem; }
+  .res-card { padding: .8rem .7rem; border-radius: 14px; }
+  .res-card h3 { font-size: .86rem; }
+  .res-card p { font-size: .74rem; line-height: 1.55; }
+  .res-tag { font-size: .62rem; }
+  .res-dl { font-size: .74rem; }
+}
