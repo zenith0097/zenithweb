@@ -367,7 +367,7 @@ input[type="range"]::-moz-range-thumb {
 
 /* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 缁€鍓у參 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
 .community-grid { display: grid; grid-template-columns: 1fr; gap: var(--space); max-width: var(--maxw); margin: 0 auto; }
-@media (min-width: 820px) { .community-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 820px) { .community-grid { grid-template-columns: repeat(2, 1fr); } }
 .comm-card {
   display: flex; flex-direction: column; gap: .8rem;
   border: 1px solid var(--line); border-radius: var(--radius);
