@@ -17,6 +17,8 @@ Zenith AI 研学社 · 官网自检
 
 退出码：0 = 全过；1 = 有项目未通过
 """
+import glob
+import io
 import os
 import re
 import sys
@@ -109,14 +111,34 @@ def main():
         p = os.path.join(ROOT, f.replace("/", os.sep))
         chk(os.path.exists(p), f, "%d 字节" % os.path.getsize(p) if os.path.exists(p) else "缺失")
 
-    print("\n[8b] 资料区下载链接是否都有真文件（防止点开 404）")
+    print("\n[8b] 资料区链接是否都有真东西（防止点开 404）")
     local_links = sorted(set(re.findall(r'href="(资料/[^"]+)"', html)))
     if not local_links:
-        chk(True, "资料区暂无本地文件链接", "")
+        chk(True, "资料区暂无本地链接", "")
     for href in local_links:
-        p = os.path.join(ROOT, href.replace("/", os.sep))
-        chk(os.path.exists(p), href.split("/")[-1],
-            "%d 字节" % os.path.getsize(p) if os.path.exists(p) else "文件不存在")
+        p = os.path.join(ROOT, href.replace("/", os.sep).rstrip(os.sep))
+        if os.path.isdir(p):
+            has_index = os.path.exists(os.path.join(p, "index.html"))
+            chk(has_index, href + "（资料自己的页面）", "有 index.html" if has_index else "缺 index.html")
+        else:
+            chk(os.path.exists(p), href.split("/")[-1],
+                "%d 字节" % os.path.getsize(p) if os.path.exists(p) else "文件不存在")
+
+    print("\n[8c] 每份资料自己的页面：正文图与下载文件是否都在")
+    for d in sorted(glob.glob(os.path.join(ROOT, "资料", "*"))):
+        if not os.path.isdir(d) or not os.path.exists(os.path.join(d, "index.html")):
+            continue
+        name = os.path.basename(d)
+        sub = io.open(os.path.join(d, "index.html"), encoding="utf-8").read()
+        imgs = sorted(set(re.findall(r'src="(pages/[^"]+)"', sub)))
+        miss = [s for s in imgs if not os.path.exists(os.path.join(d, s.replace("/", os.sep)))]
+        chk(len(imgs) > 0 and not miss, name + " 正文图 %d 张" % len(imgs),
+            "全部到位" if not miss else "缺 %d 张" % len(miss))
+        pdfs = sorted(set(re.findall(r'href="([^"#?]+\.pdf)"', sub)))
+        for f in pdfs:
+            p = os.path.join(d, f.replace("/", os.sep))
+            chk(os.path.exists(p), name + " / " + f,
+                "%d 字节" % os.path.getsize(p) if os.path.exists(p) else "下载文件不存在")
 
     print("\n[9] 上线前必删项")
     temp_marks = {
