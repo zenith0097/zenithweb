@@ -157,7 +157,7 @@
     <p class="sec-sub">我们不只是说，还动手做。把内容做成了能玩的东西——<b>你直接上手试试</b>。</p>
   </div>
 
-  <div class="tools-grid">
+  <div class="tools-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem">
 
   <!-- 好玩 0：毛选金句卡 -->
   <div class="tool-wrap reveal" id="toolMao">
@@ -321,6 +321,8 @@
     var g = document.querySelector('.tools-grid');
     var n = g ? getComputedStyle(g).gridTemplateColumns.split(' ').filter(Boolean).length : 0;
     b.textContent = '✅ 本地最新版 v20260929c ｜ 窗口 ' + window.innerWidth + 'px ｜ 玩法区 ' + n + ' 栏';
+    /* 把"你这台机器实际算出来的排版"回报给本地诊断服务，免得来回猜 */
+    try { fetch('/__report?w=' + window.innerWidth + '&cols=' + n, { cache: 'no-store' }); } catch (e) {}
   }
   window.addEventListener('resize', up);
   up();
