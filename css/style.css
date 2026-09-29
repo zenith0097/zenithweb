@@ -481,7 +481,15 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 .tool-foot { max-width: none; margin: auto 0 0; padding: 0 1.4rem 1.2rem; font-size: .82rem; }
 .tool-wrap .btn-primary { align-self: flex-start; }
 @media (max-width: 1000px) { .tools-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px) { .tools-grid { grid-template-columns: 1fr; } .tool-wrap { aspect-ratio: auto; } }
+/* 窄屏也保持两栏并排（原来 640px 以下会掉成一栏顺排，过路 9/29 要求并排） */
+@media (max-width: 640px) {
+  .tools-grid { grid-template-columns: repeat(2, 1fr); gap: .8rem; }
+  .tool-wrap { aspect-ratio: auto; }
+  .tool-head { padding: 1rem .9rem 0; }
+  .tool-head h3 { font-size: 1rem; }
+  .tool-head p { font-size: .82rem; }
+  .tool-body { padding: .9rem .9rem 1.1rem; }
+}
 /* 全站流动渐变（aurora 极光缓慢漂移） */
 body { position: relative; overflow-x: hidden; }
 body::before {
