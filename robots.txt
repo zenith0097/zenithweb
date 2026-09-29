@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zenith0097.github.io/zenithweb/sitemap.xml
