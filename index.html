@@ -41,7 +41,7 @@
   }
 }
 </script>
-<link rel="stylesheet" href="css/style.css?v=20260929e">
+<link rel="stylesheet" href="css/style.css?v=20260929f">
 </head>
 <body>
 
@@ -158,29 +158,30 @@
     <p class="sec-sub">我们不只是说，还动手做。把内容做成了能玩的东西——<b>你直接上手试试</b>。</p>
   </div>
 
-  <div class="tools-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem">
+  <div class="tools-grid reveal">
 
-  <!-- 好玩 0：毛选金句卡 -->
   <div class="tool-wrap reveal" id="toolMao">
-    <div class="tool-head">
-      <span class="tool-badge">📜 答案之书</span>
-      <h3>难题有解 · 一问一签</h3>
-      <p>心里有难题，抽一支"教员"的签。用教员的思想，指导当下的难题。</p>
-    </div>
-    <div class="tool-body">
+    <span class="tool-badge">📜 答案之书</span>
+    <h3>难题有解 · 一问一签</h3>
+    <p class="tool-desc">心里有难题，抽一支"教员"的签。用教员的思想，指导当下的难题。</p>
+    <div class="tool-act">
       <a class="btn btn-primary" href="https://zenith0097.github.io/nantiyoujie/" target="_blank" rel="noopener">🃏 去抽一张</a>
-      <p class="tool-foot" style="margin-top:1rem;">已收录 137 句，每天一问。</p>
     </div>
+    <p class="tool-note">已收录 137 句，每天一问。</p>
+
   </div>
 
-  <!-- 工具 1：开店决策小测 -->
   <div class="tool-wrap reveal" id="toolShop">
-    <div class="tool-head">
-      <span class="tool-badge">🏪 你要开什么店？</span>
-      <h3>加盟店 or 自营店？决策小测</h3>
-      <p>WorkBuddy 是加盟店，DeepSeek Harness 是自营店。三问测出你的开店体质。</p>
+    <span class="tool-badge">🏪 你要开什么店？</span>
+    <h3>加盟店 or 自营店？决策小测</h3>
+    <p class="tool-desc">WorkBuddy 是加盟店，DeepSeek Harness 是自营店。三问测出你的开店体质。</p>
+    <div class="tool-act">
+      <button class="btn btn-primary tool-toggle" type="button" aria-expanded="false">开始测</button>
     </div>
-    <div class="quiz" id="quiz">
+    <p class="tool-note">工具背后的完整推理，藏在我们的口播《你要开什么店？》里。</p>
+
+      <div class="tool-panel" hidden>
+<div class="quiz" id="quiz">
       <div class="quiz-q" data-q="0">
         <p class="quiz-num">第 1 问 / 共 3 问</p>
         <h4>你更看重哪样？</h4>
@@ -211,17 +212,20 @@
         <button class="btn btn-ghost" id="quizAgain">再测一次</button>
       </div>
     </div>
-    <p class="tool-foot">工具背后的完整推理，藏在我们的口播《你要开什么店？》里。</p>
+      </div>
   </div>
 
-  <!-- 工具 2：你是哪种 AI 用户？ -->
   <div class="tool-wrap reveal" id="toolUser">
-    <div class="tool-head">
-      <span class="tool-badge">🧬 你属于哪种 AI 用户？</span>
-      <h3>AI 体质小测 · 三问见分晓</h3>
-      <p>跟风自由党 / 家当白送党 / 赖着不走党——你是哪种？结果可能有点扎心。</p>
+    <span class="tool-badge">🧬 你属于哪种 AI 用户？</span>
+    <h3>AI 体质小测 · 三问见分晓</h3>
+    <p class="tool-desc">跟风自由党 / 家当白送党 / 赖着不走党——你是哪种？结果可能有点扎心。</p>
+    <div class="tool-act">
+      <button class="btn btn-primary tool-toggle" type="button" aria-expanded="false">开始测</button>
     </div>
-    <div class="quiz" id="quiz2">
+    <p class="tool-note">这套测试的完整推理，藏在口播《自由不是免费的，确定性也是资产》里。</p>
+
+      <div class="tool-panel" hidden>
+<div class="quiz" id="quiz2">
       <div class="quiz-q" data-q="0">
         <p class="quiz-num">第 1 问 / 共 3 问</p>
         <h4>你选 AI 工具，最看重什么？</h4>
@@ -255,19 +259,18 @@
         <button class="btn btn-ghost" id="quiz2Again">再测一次</button>
       </div>
     </div>
-    <p class="tool-foot">这套测试的完整推理，藏在口播《自由不是免费的，确定性也是资产》里。</p>
+      </div>
   </div>
 
-  <!-- 玩法 4：后续迭代（这个区会一直加新玩法，过路 9/29 定） -->
-  <div class="tool-wrap tool-wrap-soon reveal" id="toolSoon">
-    <div class="tool-head">
-      <span class="tool-badge">🧪 持续加新</span>
-      <h3>后续迭代</h3>
-      <p>这个区不会停。想到什么好玩的就做出来放这儿——想玩什么，也可以直接说。</p>
+  <div class="tool-wrap reveal tool-wrap-soon" id="toolSoon">
+    <span class="tool-badge">🧪 持续加新</span>
+    <h3>后续迭代</h3>
+    <p class="tool-desc">这个区不会停。想到什么好玩的就做出来放这儿。</p>
+    <div class="tool-act">
+      <a class="btn btn-primary" href="mailto:zenith0097@163.com?subject=想看的小工具">想看什么 ↗</a>
     </div>
-    <div class="tool-body">
-      <a class="btn btn-ghost" href="mailto:zenith0097@163.com?subject=想看的小工具">想看什么 ↗</a>
-    </div>
+    <p class="tool-note">想玩什么，也可以直接说。</p>
+
   </div>
 
   </div><!-- /tools-grid -->
@@ -301,13 +304,16 @@
     <h2>资料区</h2>
     <p class="sec-sub">看到这儿还想动手的，这些直接拿去用——<b>点开就能下载</b>。</p>
   </div>
-  <div class="res-grid reveal">
+  <div class="res-list reveal">
 
-    <a class="res-card" href="资料/git双机同步/">
+    <a class="res-item" href="资料/git双机同步/">
       <span class="res-thumb"><img src="资料/git双机同步/cover.png" alt="Git双机同步 · 操作手册 封面"></span>
-      <h3>Git双机同步 · 操作手册</h3>
-      <p class="res-meta">PDF · 8 页 · 708 KB</p>
-      <span class="res-btn">查看资料 →</span>
+      <span class="res-body">
+        <span class="res-title">Git双机同步 · 操作手册</span>
+        <span class="res-desc">两台电脑把同一个项目同步起来的完整步骤：建仓、配钥匙、日常推拉，照着做就行。</span>
+        <span class="res-meta">PDF · 8 页 · 708 KB</span>
+      </span>
+      <span class="res-go" aria-hidden="true">→</span>
     </a>
 
   </div>
@@ -342,7 +348,7 @@
   <p class="footer-copy">© 2026 Zenith AI 研学社</p>
 </footer>
 
-<script src="js/main.js?v=20260929e"></script>
+<script src="js/main.js?v=20260929f"></script>
 
 </body>
 </html>
