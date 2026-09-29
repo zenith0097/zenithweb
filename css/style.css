@@ -60,7 +60,7 @@ body {
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 鐎佃壈鍩?閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== .nav ===== */
 .nav {
   position: fixed; inset: 0 0 auto 0; z-index: 100;
   background: rgba(255,255,255, 0.72);
@@ -114,7 +114,7 @@ img { max-width: 100%; }
   .nav-toggle { display: none; }
 }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閹稿鎸?閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== .btn ===== */
 .btn {
   display: inline-block; padding: .8rem 1.7rem; border-radius: 999px;
   font-weight: 700; font-size: 1rem; letter-spacing: .02em;
@@ -131,7 +131,7 @@ img { max-width: 100%; }
 }
 .btn-ghost:hover { border-color: #6D5BD0; background: rgba(167,139,250,.14); transform: translateY(-2px); }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 Hero 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== Hero ===== */
 .hero {
   position: relative; min-height: 100svh;
   display: flex; align-items: center; justify-content: center;
@@ -189,7 +189,7 @@ img { max-width: 100%; }
 .star.big { width: 3px; height: 3px; background: var(--gold); }
 @keyframes twinkle { 0%,100% { opacity: .15; } 50% { opacity: .8; } }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閸栧搫娼￠柅姘辨暏 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== .section ===== */
 .section { padding: var(--sec-pad) var(--space); position: relative; }
 .section-alt {
   background:
@@ -208,7 +208,7 @@ img { max-width: 100%; }
 .sec-sub { color: var(--text-soft); max-width: 640px; }
 .sec-sub b { color: var(--cream); }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 濠婃艾濮╅弰鍓у箛 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== .reveal ===== */
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
 .reveal.in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
@@ -220,7 +220,7 @@ img { max-width: 100%; }
   html { scroll-behavior: auto; }
 }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閸愬懏鐗虫稉澶婂幢 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== .cards-3 ===== */
 .cards-3 { display: grid; grid-template-columns: 1fr; gap: var(--space); max-width: var(--maxw); margin: 0 auto; }
 @media (min-width: 820px) { .cards-3 { grid-template-columns: repeat(3, 1fr); } }
 
@@ -248,7 +248,7 @@ img { max-width: 100%; }
 }
 .big-quote cite { display: block; margin-top: .8rem; font-style: normal; color: var(--text-dim); font-size: var(--fs-small); }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閸愬懎顔愰惌鈺呮█ 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== .pillars ===== */
 .pillars { display: grid; grid-template-columns: 1fr; gap: var(--space); max-width: var(--maxw); margin: 0 auto 3rem; }
 @media (min-width: 820px) { .pillars { grid-template-columns: repeat(3, 1fr); } }
 
@@ -265,7 +265,7 @@ img { max-width: 100%; }
 .pillar p { color: var(--text-soft); margin-bottom: 1rem; }
 .pillar-tag { font-size: var(--fs-small); color: var(--gold-deep); }
 
-/* 缁鍨崚妤勩€?*/
+/* ===== .series-wrap, .quote-wall ===== */
 .series-wrap, .quote-wall { max-width: var(--maxw); margin: 0 auto; }
 .series-wrap { margin-bottom: 3rem; }
 .series-title { font-size: 1.25rem; margin-bottom: 1.2rem; }
@@ -294,7 +294,7 @@ img { max-width: 100%; }
 }
 .quote-card blockquote { color: var(--cream); font-weight: 600; }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 娴ｆ粌鎼ч敍姘唉娴滄帒浼愰崗?閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== .tool-wrap ===== */
 .tool-wrap {
   display: flex; flex-direction: column;
   border: 1px solid var(--line); border-radius: var(--radius);
@@ -310,7 +310,7 @@ img { max-width: 100%; }
 .tool-wrap h3 { font-size: 1.12rem; font-weight: 800; margin-bottom: .5rem; line-height: 1.45; }
 .tool-desc { color: var(--text-soft); font-size: .88rem; line-height: 1.7; min-height: 3.4em; }
 .tool-act { display: flex; padding-top: 1.15rem; }
-.tool-note { margin-top: .8rem; color: var(--text-dim); font-size: .78rem; line-height: 1.6; }
+.tool-note { margin-top: .8rem; color: var(--text-dim); font-size: .78rem; line-height: 1.6; min-height: 3.2em; }
 .tool-panel { padding-top: .35rem; }
 .tool-panel[hidden] { display: none; }
 .tool-panel .quiz { padding: .9rem 0 0; }
@@ -335,7 +335,7 @@ img { max-width: 100%; }
 .quiz-result p { color: var(--text-soft); max-width: 520px; margin: 0 auto 1.4rem; }
 .quiz-result .btn { margin-top: .4rem; }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 缁€鍓у參 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== .community-grid ===== */
 .community-grid { display: grid; grid-template-columns: 1fr; gap: var(--space); max-width: var(--maxw); margin: 0 auto; }
 @media (min-width: 820px) { .community-grid { grid-template-columns: repeat(2, 1fr); } }
 .comm-card {
@@ -351,7 +351,7 @@ img { max-width: 100%; }
 .comm-tag { font-size: var(--fs-small); color: var(--gold-deep); }
 .comm-card-cta { border-color: rgba(167,139,250,.4); background: linear-gradient(160deg, rgba(167,139,250,.12), rgba(139,92,246,.06)); }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閹恒儱顓?閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== .consult-grid ===== */
 .consult-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; max-width: var(--maxw); margin: 0 auto; }
 @media (min-width: 820px) { .consult-grid { grid-template-columns: 1.1fr 1fr; gap: 3rem; } }
 .step { display: flex; gap: 1.1rem; align-items: flex-start; padding: 1rem 0; border-bottom: 1px dashed var(--line-soft); }
@@ -372,12 +372,12 @@ img { max-width: 100%; }
 .consult-note h3 { margin-bottom: 1rem; color: var(--orange); }
 .consult-note ul { list-style: none; display: flex; flex-direction: column; gap: .8rem; margin-bottom: 1.6rem; }
 .consult-note li { color: var(--text-soft); padding-left: 1.2rem; position: relative; }
-.consult-note li::before { content: "璺?; position: absolute; left: 0; color: #6D5BD0; font-weight: 800; }
+.consult-note li::before { content: "→"; position: absolute; left: 0; color: #6D5BD0; font-weight: 800; }
 .consult-note li b { color: var(--cream); }
 .small { font-size: var(--fs-small); margin-top: .7rem; }
 .dim { color: var(--text-dim); }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 閸忓厖绨?閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== .about-grid ===== */
 .about-grid { display: grid; grid-template-columns: 1fr; gap: var(--space); max-width: var(--maxw); margin: 0 auto; }
 @media (min-width: 820px) { .about-grid { grid-template-columns: repeat(3, 1fr); } }
 .about-card { border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 1.7rem 1.5rem; background: rgba(255,255,255,.5); }
@@ -395,7 +395,7 @@ img { max-width: 100%; }
   background: rgba(167,139,250,.05);
 }
 
-/* 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 Footer 閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓閳光偓 */
+/* ===== Footer ===== */
 .footer {
   text-align: center; padding: 4rem var(--space) 3rem;
   border-top: 1px solid var(--line-soft);
@@ -486,7 +486,7 @@ h1, h2, h3 { letter-spacing: -0.01em; }
   .tool-desc { font-size: .74rem; line-height: 1.6; min-height: 0; }
   .tool-act { padding-top: .8rem; }
   .tool-act .btn { font-size: .76rem; padding: .42rem .8rem; }
-  .tool-note { font-size: .68rem; }
+  .tool-note { font-size: .68rem; min-height: 0; }
   .tool-panel .quiz { padding-top: .7rem; }
   .quiz-num { font-size: .7rem; }
   .quiz-q h4 { font-size: .82rem; margin-bottom: .6rem; }
@@ -551,12 +551,8 @@ body::before {
   transition: transform .22s, box-shadow .22s, border-color .22s;
 }
 .res-item:hover { transform: translateY(-3px); border-color: rgba(139,92,246,.55); box-shadow: 0 16px 34px rgba(124,58,237,.14); }
-.res-thumb {
-  flex: 0 0 auto; display: block; width: 112px; height: 80px; border-radius: 12px; overflow: hidden;
-  background: #fff; border: 1px solid rgba(167,139,250,.3);
-}
-.res-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .res-body { flex: 1; min-width: 0; display: block; }
+.res-item .res-title { padding-top: 0; }
 .res-title { display: block; font-family: var(--font-display); font-size: 1.02rem; font-weight: 700; line-height: 1.5; }
 .res-desc { display: block; margin-top: .25rem; font-size: .84rem; color: var(--text-soft); line-height: 1.65; }
 .res-meta { display: block; margin-top: .5rem; font-size: .74rem; color: var(--text-dim); }
@@ -572,8 +568,7 @@ body::before {
 .dl-tip.is-on { opacity: 1; transform: translate(-50%, 0); }
 @media (max-width: 700px) {
   .res-item { gap: .85rem; padding: .85rem; border-radius: 14px; }
-  .res-thumb { width: 84px; height: 62px; border-radius: 10px; }
-  .res-title { font-size: .94rem; }
+    .res-title { font-size: .94rem; }
   .res-desc { font-size: .78rem; }
   .res-meta { font-size: .7rem; margin-top: .35rem; }
 }

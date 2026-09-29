@@ -74,26 +74,7 @@
       else if (deleting && ci === 0) { deleting = false; qi = (qi + 1) % quotes.length; delay = 500; }
       ci += deleting ? -1 : 1;
       setTimeout(type, delay);
-      /* ── 趣味区：卡里的小测，点了才展开（四张卡永远一样高）── */
-  document.querySelectorAll(".tool-toggle").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var card = btn.closest(".tool-wrap");
-      var panel = card && card.querySelector(".tool-panel");
-      if (!panel) return;
-      var willOpen = panel.hidden;
-      panel.hidden = !willOpen;
-      btn.setAttribute("aria-expanded", willOpen ? "true" : "false");
-      btn.textContent = willOpen ? "收起" : "开始测";
-      if (willOpen) {
-        var box = panel.getBoundingClientRect();
-        if (box.bottom > innerHeight) {
-          window.scrollBy({ top: box.top - 140, behavior: reduceMotion ? "auto" : "smooth" });
-        }
-      }
-    });
-  });
-
-})();
+    })();
   } else if (quoteLine) {
     quoteLine.textContent = quotes[0];
   }
