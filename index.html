@@ -41,7 +41,7 @@
   }
 }
 </script>
-<link rel="stylesheet" href="css/style.css?v=20260929c">
+<link rel="stylesheet" href="css/style.css?v=20260929d">
 </head>
 <body>
 
@@ -305,10 +305,8 @@
 
     <a class="res-card" href="资料/Git双机同步-操作手册.pdf" download>
       <span class="res-icon">📄</span>
-      <div class="res-text">
-        <h3>Git双机同步 · 操作手册</h3>
-        <p>PDF 操作手册</p>
-      </div>
+      <h3>Git双机同步 · 操作手册</h3>
+      <p class="res-meta">PDF · 725 KB</p>
       <span class="res-btn">↓ 下载</span>
     </a>
 
@@ -344,7 +342,7 @@
   <p class="footer-copy">© 2026 Zenith AI 研学社</p>
 </footer>
 
-<script src="js/main.js?v=20260929c"></script>
+<script src="js/main.js?v=20260929d"></script>
 
 <!-- ⚠️ 临时诊断条（上线前必删）：一眼看出"这是最新版"以及当前窗口下玩法区几栏 -->
 <div id="diagBadge" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#7C3AED;color:#fff;font:600 14px/1.9 -apple-system,'Microsoft YaHei',sans-serif;text-align:center;letter-spacing:.02em;pointer-events:none;box-shadow:0 -2px 12px rgba(0,0,0,.18)">最新版读取中…</div>
@@ -354,7 +352,7 @@
   function up() {
     var g = document.querySelector('.tools-grid');
     var n = g ? getComputedStyle(g).gridTemplateColumns.split(' ').filter(Boolean).length : 0;
-    b.textContent = '✅ 本地最新版 v20260929c ｜ 窗口 ' + window.innerWidth + 'px ｜ 玩法区 ' + n + ' 栏';
+    b.textContent = '✅ 本地最新版 v20260929d ｜ 窗口 ' + window.innerWidth + 'px ｜ 玩法区 ' + n + ' 栏';
     /* 把"你这台机器实际算出来的排版"回报给本地诊断服务，免得来回猜 */
     try { fetch('/__report?w=' + window.innerWidth + '&cols=' + n, { cache: 'no-store' }); } catch (e) {}
   }

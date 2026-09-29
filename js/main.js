@@ -213,4 +213,22 @@
       if (y < innerHeight) mount.style.transform = "translateY(" + (y * 0.22) + "px)";
     }, { passive: true });
   }
+
+  /* ── 资料区：点了下载给个明确回声（浏览器的下载提示有时很安静，看着像没反应）── */
+  var dlCards = document.querySelectorAll(".res-card[download]");
+  if (dlCards.length) {
+    var dlTip = document.createElement("div");
+    dlTip.className = "dl-tip";
+    dlTip.setAttribute("role", "status");
+    document.body.appendChild(dlTip);
+    var dlTimer;
+    dlCards.forEach(function (card) {
+      card.addEventListener("click", function () {
+        dlTip.textContent = "已开始下载：文件会存到浏览器的「下载」里";
+        dlTip.classList.add("is-on");
+        clearTimeout(dlTimer);
+        dlTimer = setTimeout(function () { dlTip.classList.remove("is-on"); }, 4000);
+      });
+    });
+  }
 })();
